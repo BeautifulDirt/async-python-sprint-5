@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
-from api import base
+from api import base, files, users
 from core.config import app_settings, logging
 
 
@@ -17,6 +17,8 @@ app = FastAPI(
 )
 
 app.include_router(base.router)
+app.include_router(files.router)
+app.include_router(users.router)
 
 
 if __name__ == '__main__':

@@ -17,6 +17,7 @@ class AppSettings(BaseSettings):
     project_summary: str
     project_version: str
     secret_key: str
+    algorithm: str
 
     database_dsn: PostgresDsn
     database_user: str
@@ -30,6 +31,9 @@ class AppSettings(BaseSettings):
     redis_host: str
     redis_port: int
     redis_password: str
+
+    upload_folder: str
+    max_file_size: int
 
     class Config:
         env_file = '.env'

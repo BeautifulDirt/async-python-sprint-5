@@ -19,7 +19,7 @@ class File(Base):
     path = Column(String(100), unique=True, nullable=False)
     size = Column(Integer)
     is_downloadable = Column(Boolean, default=True)
-    owner = Column(ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
+    id_user = Column(ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
 
     def __repr__(self):
         return "File(name='%s')" % (self.name,)
