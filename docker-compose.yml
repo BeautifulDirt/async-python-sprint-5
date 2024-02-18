@@ -24,7 +24,7 @@ services:
       - ./.env
 
   app:
-    image: files_torage:latest
+    image: files_storage:latest
     build: .
     env_file:
       - ./.env
