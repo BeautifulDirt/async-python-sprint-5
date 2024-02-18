@@ -24,7 +24,7 @@ services:
       - ./.env
 
   app:
-    image: koshelevd/storage-api:latest
+    image: files_torage:latest
     build: .
     env_file:
       - ./.env
