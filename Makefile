@@ -1,18 +1,40 @@
-SHELL := /bin/bash
+lint:
+	docker-compose up files_storage -d
+	-docker exec -it files_storage python -m flake8 --max-line-length 120 src
+	docker-compose down --remove-orphans
 
-clean: ## remove python/pytest cache files and other temp junk
-	find . -name '*.pyc' | xargs rm -rf
-	find . -name '*__pycache__' | xargs rm -rf
-	find . -name '*.cache' | xargs rm -rf
-	rm -r .pytest_cache 2>/dev/null || true
+unittest:
+	docker-compose up files_storage -d
+	-docker exec -it files_storage pytest -ra
+	docker-compose down --remove-orphans
 
-lint: ## check code with linters
-	pylama .
+prepare:
+	make lint
+	make test
 
-isort: ## sort imports
-	isort .
+build:
+	docker build . -t files_storage
 
-black: ## format code
-	black .
+server_up:
+	docker-compose up -d nginx
 
-format: clean isort black ## do isort and black
+server_down:
+	docker-compose down --remove-orphans
+	
+msg ?= "01_initial_db"
+revision:
+	docker-compose up files_storage -d
+	docker exec -it files_storage alembic revision --autogenerate -m $(msg)
+	docker-compose down --remove-orphans
+
+upgrade_rev ?= head
+migration:
+	docker-compose up files_storage -d
+	docker exec -it files_storage alembic upgrade $(upgrade_rev)
+	docker-compose down --remove-orphans
+
+downgrade_rev ?= base
+rollback_migration:
+	docker-compose up files_storage -d
+	docker exec -it files_storage alembic downgrade $(downgrade_rev)
+	docker-compose down --remove-orphans
