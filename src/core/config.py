@@ -1,6 +1,6 @@
 import logging
 from pydantic_settings import BaseSettings
-from pydantic import PostgresDsn
+from pydantic import PostgresDsn, SecretStr
 
 from .logger import LOGGING
 
@@ -16,12 +16,12 @@ class AppSettings(BaseSettings):
     project_description: str
     project_summary: str
     project_version: str
-    secret_key: str
+    secret_key: SecretStr
     algorithm: str
 
     database_dsn: PostgresDsn
     database_user: str
-    database_password: str
+    database_password: SecretStr
     database_name: str
     database_port: int
     database_host: str
@@ -30,7 +30,7 @@ class AppSettings(BaseSettings):
     redis_dsn: str
     redis_host: str
     redis_port: int
-    redis_password: str
+    redis_password: SecretStr
 
     upload_folder: str
     max_file_size: int

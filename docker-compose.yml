@@ -12,7 +12,12 @@ services:
     restart: always
     ports:
       - ${DATABASE_PORT}:${DATABASE_PORT}
-
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   redis:
     image: redis:6.2.6-alpine
     command: redis-server --requirepass ${REDIS_PASSWORD}
@@ -30,6 +35,9 @@ services:
       - ./.env
     restart:
       always
+    depends_on:
+      - db
+      - redis
     volumes:
       - ./storage:/opt/src/storage
 
